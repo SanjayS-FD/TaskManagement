@@ -1,34 +1,25 @@
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Virtual environment
+# Virtual Environment
 venv/
 .env
-.venv/
 
-# Database files
-*.db
-*.sqlite3
-
-# Environment variables & secrets
-.env
-.env.*
-
-# VS Code
-.vscode/
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
 # Pytest
 .pytest_cache/
 
-# Coverage reports
-.coverage
-htmlcov/
+# VS Code
+.vscode/
+
+# Database
+task_manager.db
 
 # Logs
 *.log
 
-# OS files
+# OS Files
 .DS_Store
 Thumbs.db

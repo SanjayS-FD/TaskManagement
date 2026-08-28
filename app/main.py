@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, Header, HTTPException
 from sqlalchemy.orm import Session
 
+from app.logger import logger
 from app.auth import verify_password
 from app.schemas import LoginRequest, TaskUpdate
 
@@ -88,6 +89,10 @@ def create_user(user: UserCreate, db: Session = Depends(get_db), current_user=De
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    
+    logger.info(
+    f"New user created: {new_user.username}"
+    )
 
     return new_user
 
@@ -106,16 +111,33 @@ def login(login_data: LoginRequest,
     ).first()
 
     if not user:
-        return {"message": "Invalid username"}
+        logger.warning(
+            f"Invalid username attempt: {login_data.username}"
+        )
+
+        return {
+            "message": "Invalid username"
+        }
 
     if not verify_password(login_data.password,user.password):
-        return {"message": "Invalid password"}
+
+        logger.warning(
+            f"Invalid password attempt for {user.username}"
+        )
+
+        return {
+            "message": "Invalid password"
+        }
 
     token = create_access_token(
     {
         "sub": user.username,
         "role": user.role
     }
+    )
+
+    logger.info(
+    f"User logged in: {user.username}"
     )
 
     return {
@@ -146,6 +168,9 @@ def delete_user(
             detail="User not found"
         )
 
+    logger.info(
+    f"User deleted: {user.username}"
+    )
     db.delete(user)
     db.commit()
 
@@ -184,6 +209,9 @@ def create_task(
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
+    logger.info(
+    f"Task created: {new_task.title}"
+    )
 
     return new_task
 
@@ -219,6 +247,10 @@ def update_task(
     db.commit()
     db.refresh(task)
 
+    logger.info(
+    f"Task updated: {task.id}"
+    )
+
     return task
 
 @app.delete("/tasks/{task_id}")
@@ -244,6 +276,9 @@ def delete_task(
             detail="You can delete only your own tasks"
         )
 
+    logger.info(
+    f"Task deleted: {task.id}"
+    )
     db.delete(task)
     db.commit()
 
