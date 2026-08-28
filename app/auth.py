@@ -1,6 +1,7 @@
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
+from app.logger import logger
 
 SECRET_KEY = "abcd"
 ALGORITHM = "HS256"
@@ -15,6 +16,10 @@ def hash_password(password):
     return pwd_context.hash(password)
 
 def verify_password(plain_password,hashed_password):
+    logger.info(
+    f"Password updated: {plain_password}, {hashed_password}"
+    )
+
     return pwd_context.verify(plain_password,hashed_password)  
 
 #creating JWT token for accessing

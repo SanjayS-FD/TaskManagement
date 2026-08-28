@@ -2,7 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 handler = RotatingFileHandler(
-    "app.log",
+    "debug.log",
     maxBytes=1024 * 1024,
     backupCount=5
 )

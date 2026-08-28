@@ -253,6 +253,18 @@ def update_task(
 
     return task
 
+@app.get("/tasks", response_model=list[TaskResponse])
+def get_tasks(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_db_user)
+):
+
+    tasks = db.query(Task).filter(
+        Task.user_id == current_user.id
+    ).all()
+
+    return tasks
+
 @app.delete("/tasks/{task_id}")
 def delete_task(
     task_id: int,
