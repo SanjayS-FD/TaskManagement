@@ -18,6 +18,7 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     description = Column(String)
+    status = Column(String, default="Pending")
 
     user_id = Column(
         Integer,

@@ -33,6 +33,13 @@ class TaskResponse(BaseModel):
     title: str
     description: str
     user_id: int
+    status: str
 
     class Config:
         from_attributes = True
+
+    #update
+class TaskUpdate(BaseModel):
+    title: str
+    description: str
+    status: str
